@@ -33,7 +33,7 @@ func currentBlock() {
 func convertWeiToEth(balance *big.Int) *big.Int {
 	return new(big.Int).Div(balance, big.NewInt(params.Ether))
 }
-func convertEtherToWei(ethAmount int) *big.Int {
+func convertEtherToWei(ethAmount float64) *big.Int {
 	return new(big.Int).Mul(big.NewInt(int64(ethAmount)), big.NewInt(params.Ether))
 }
 
@@ -81,7 +81,7 @@ func sendToWallet() {
 		log.Println(err)
 		return
 	}
-	amount := convertEtherToWei(19)
+	amount := convertEtherToWei(1)
 	gasLimit := 21000
 	gas, err := client.SuggestGasPrice(ctx)
 	if err != nil {
@@ -107,10 +107,20 @@ func sendToWallet() {
 	fmt.Printf("transaction sent: %s", signedTx.Hash().Hex())
 }
 
+func GetTransaction(hash string) {
+	tx, pending, err := client.TransactionByHash(ctx, common.HexToHash(hash))
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	fmt.Println(tx.Value(), tx.To(), pending)
+}
+
 func main() {
 	currentBlock()
 	getWalletBalance()
 	// pubAddr, pubKey := createWallet()
 	// fmt.Println("wallet info:", pubAddr, pubKey)
 	sendToWallet()
+	// GetTransaction("0xbb3dcb1a862423ddc766bf6008f6a86b1b726d7376ee1591a0adfb8cf0316f97")
 }
