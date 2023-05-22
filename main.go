@@ -48,16 +48,16 @@ func getWalletBalance() {
 	fmt.Println(address, balance, params.Ether, ethbalance)
 }
 
-func createWallet() (publicAddress string, publicKey string) {
+func createWallet() (publicAddress string, privateKey string) {
 	getPrivatekey, err := crypto.GenerateKey()
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	getPublickey := crypto.FromECDSA(getPrivatekey)
-	thePublickey := hexutil.Encode(getPublickey)
+	thePrivatekey := hexutil.Encode(getPublickey)
 	thePublicAddress := crypto.PubkeyToAddress(getPrivatekey.PublicKey).Hex()
-	return thePublicAddress, thePublickey
+	return thePublicAddress, thePrivatekey
 }
 
 func sendToWallet() {
